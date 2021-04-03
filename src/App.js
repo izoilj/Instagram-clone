@@ -2,25 +2,35 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Post from './Post';
 import {db} from './firebase';
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import { Button } from '@material-ui/core';
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+}));
 
 function App() {
-  // const [posts, setPosts] = useState([
-  //   {
-  //     username: "joy", 
-  //     caption: "Wow it works", 
-  //     imageUrl: "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=3150&q=80"
-  //   },
-  //   {
-  //     username: "juyoung", 
-  //     caption: "Yooooooo", 
-  //     imageUrl: "https://images.unsplash.com/photo-1572450732467-5eb1311e7bc8?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8bW9kZXJuJTIwYXJ0fGVufDB8fDB8&ixlib=rb-1.2.1&w=1000&q=80"
-  //   },
-  //   {
-  //     username: "lee", 
-  //     caption: "YammmYammmm", 
-  //     imageUrl: "https://health.clevelandclinic.org/wp-content/uploads/sites/3/2019/10/vitaminDfood-1132105308-770x553.jpg"
-  //   }
-  // ]); //Hook
+  const classes = useStyles();
+  const [modalStyle] = useState(getModalStyle);
 
   const [posts, setPosts] = useState([]);
   const [open, setOpen] = useState(false);
@@ -35,11 +45,10 @@ function App() {
       })));
     })
   }, []); 
-  //[] -> 안에 있는 코드가 무엇이든 페이지가 새로 고쳐질때 한번 실행된다
-  //      다시는 실행되지 않는다? Tha's it never run again?
-  //onSnapshot(snapshot) -> 문서가 추가될때마다 변경사항이 문서를 업데이트함
-  //        every tima a new post is added, this code fires
 
+  const signUp = (event) => {
+
+  }
 
   return (
     <div className="app">
@@ -63,6 +72,8 @@ function App() {
         />
       </div>
 
+      {/* <Button onClick={signUp}>Sign up</Button> */}
+      <Button onClick={() => setOpen(true)}>Sign up</Button>
       <h1>Hellodsfsdfsdfdsfsdfsdfsdfsfdsfsdfsdfsdfsd</h1>
 
       {
