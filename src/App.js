@@ -5,6 +5,7 @@ import {db, auth } from './firebase';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
+import ImageUpload from './imageUpload';
 
 function getModalStyle() {
   const top = 50;
@@ -46,18 +47,7 @@ function App() {
     auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         //user login
-        console.log(authUser);
         setUser(authUser);
-
-        // if (authUser.displayName) {
-        //   //don't update username
-        // }
-        // else {
-        //   // if we jest create someone
-        //   return authUser.updateProfile({
-        //     displayName: username,
-        //   });
-        // }
       }
       else {
         //user log out
@@ -74,7 +64,7 @@ function App() {
 // useEffect : Runs a piecs of code based on a specific condition
   useEffect(() => {
     // This is where the code runs
-    db.collection('posts').onSnapshot(snapshot => {
+    db.collection('posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
       setPosts(snapshot.docs.map(doc => ({
         id: doc.id,
         post: doc.data()
@@ -109,6 +99,12 @@ function App() {
 
   return (
     <div className="app">
+
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName} />
+      ): (
+        <h3>Sorry, you need to login to upload</h3>
+      )}
       
       <Modal
         open={open}
@@ -211,12 +207,6 @@ function App() {
           />
         ))
       }
-
-      {/*call the Post.js conponent*/}
-      {/* <Post username="joy" caption="Wow it works" imageUrl="https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=3150&q=80" /> */}
-      {/* <Post username="juyoung" caption="Yooooooo" imageUrl="https://images.unsplash.com/photo-1572450732467-5eb1311e7bc8?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8bW9kZXJuJTIwYXJ0fGVufDB8fDB8&ixlib=rb-1.2.1&w=1000&q=80" /> */}
-      {/* <Post username="lee" caption="YammmYammmm" imageUrl="https://health.clevelandclinic.org/wp-content/uploads/sites/3/2019/10/vitaminDfood-1132105308-770x553.jpg" /> */}
-
     </div>
   );
 }
