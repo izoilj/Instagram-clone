@@ -99,12 +99,6 @@ function App() {
 
   return (
     <div className="app">
-
-      {user?.displayName ? (
-        <ImageUpload username={user.displayName} />
-      ): (
-        <h3>Sorry, you need to login to upload</h3>
-      )}
       
       <Modal
         open={open}
@@ -185,28 +179,34 @@ function App() {
           alt="" 
           className="app_headerImage"
         />
+
+        {user ? (
+          <Button onClick={() => auth.signOut()}>Logout</Button>
+        ): (
+          <div className="app_loginContainer">
+            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+            <Button onClick={() => setOpen(true)}>Sign up</Button>
+          </div>
+        )}
       </div>
 
-      {user ? (
-        <Button onClick={() => auth.signOut()}>Logout</Button>
-      ): (
-        <div className="app_loginContainer">
-          <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-          <Button onClick={() => setOpen(true)}>Sign up</Button>
-        </div>
-      )}
-      
-      <h1>Hellodsfsdfsdfdsfsdfsdfsdfsfdsfsdfsdfsdfsd</h1>
+      <div className="app_posts">
+        {
+          posts.map(({id, post}) => (
+            <Post key={id}
+              username={post.username} 
+              caption={post.caption}
+              imageUrl={post.imageUrl} 
+            />
+          ))
+        }
+      </div>
 
-      {
-        posts.map(({id, post}) => (
-          <Post key={id}
-            username={post.username} 
-            caption={post.caption}
-            imageUrl={post.imageUrl} 
-          />
-        ))
-      }
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName} />
+      ): (
+        <h3>Sorry, you need to login to upload</h3>
+      )}
     </div>
   );
 }
